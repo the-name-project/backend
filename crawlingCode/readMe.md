@@ -19,6 +19,12 @@
 <img src="https://user-images.githubusercontent.com/70316489/152732773-9e38cfc9-dc73-4fba-8c2d-037ea89e4a31.png" width="200" height="200"/>
 
 
+
+# 입력 예시 
+<img src="https://user-images.githubusercontent.com/70316489/152737433-ed856168-18f8-4a76-8748-30d9c2f31f5c.png" width="300" height="200"/>
+
+
+
 # 주의!
 
 1. 실행중인 크롬 드라이버에 최소화버튼을 클릭하셔도 되지만 닫기 버튼을 누르시면 크롤링이 정상작동을 하지 않습니다.  
