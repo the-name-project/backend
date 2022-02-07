@@ -23,6 +23,9 @@
 <img src="https://user-images.githubusercontent.com/70316489/152737433-ed856168-18f8-4a76-8748-30d9c2f31f5c.png" width="200" height="80"/>
 
 
+# 예상 소요시간
+한 가게에 검색하는 것이 많아서 하나에(프로그램을 한번 돌리는데에) 약 **2시간**정도의 시간이 
+
 
 # 주의!
 
