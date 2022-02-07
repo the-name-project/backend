@@ -13,7 +13,7 @@
        <img src="https://user-images.githubusercontent.com/70316489/152732868-2cd27988-794b-4200-b290-08f60a3a0258.png" width="400" height="200"/>
     
     
-더 많은 가게들을 크롤링하고 싶으실때는 행정동을 클릭해 들어가시면 법정동이 있으실것입니다. 이를 행정동을 입력하는 자리에 대신 입력하셔도 됩니다.  
+더 많은 가게들을 크롤링하고 싶으실때는 행정동을 클릭해 들어가시면 **법정동**이 있으실것입니다. 이를 행정동을 입력하는 자리에 대신 입력하셔도 됩니다.  
 
 <img src="https://user-images.githubusercontent.com/70316489/152732773-9e38cfc9-dc73-4fba-8c2d-037ea89e4a31.png" width="200" height="200"/>
 
