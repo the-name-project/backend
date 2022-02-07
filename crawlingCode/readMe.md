@@ -21,7 +21,7 @@
 
 
 # 입력 예시 
-<img src="https://user-images.githubusercontent.com/70316489/152737433-ed856168-18f8-4a76-8748-30d9c2f31f5c.png" width="200" height="100"/>
+<img src="https://user-images.githubusercontent.com/70316489/152737433-ed856168-18f8-4a76-8748-30d9c2f31f5c.png" width="200" height="80"/>
 
 
 
