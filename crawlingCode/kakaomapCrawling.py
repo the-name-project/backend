@@ -44,7 +44,7 @@ for admDivisionInfo in admDivisionElement:
 
 for admDivision in admDivisionlist:
 """
-kakaomapadmDivisionURL = 'http://map.kakao.com/?q=부산광역시%20'+goWhere+'%20'+admDivision+'%20음식점#'
+kakaomapadmDivisionURL = 'http://map.kakao.com/?q=부산광역시%20'+goWhere+'%20음식점#'
 
 driver.get(kakaomapadmDivisionURL)
 
@@ -259,7 +259,7 @@ while hasNext:
 time.sleep(5)
 driver.close()
 
-jsonFilename = admDivision+'.json'
+jsonFilename = goWhere+'.json'
 with open(jsonFilename,'w',encoding='utf-8') as make_file:
     json.dump(JsonGroup, make_file,ensure_ascii = False,  indent="\t")
 
