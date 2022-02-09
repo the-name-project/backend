@@ -152,6 +152,8 @@ while hasNext:
             if len(placeImg) !=0:
                 placeImg = placeImg[0].get_attribute('style')
                 placeImgURL = re.search("\".+\"",placeImg).group(0).strip('"')
+            else:
+                placeImgURL = None
 
             #태그
             tag = driver.find_elements(By.XPATH,"//div[contains(@id, 'mArticle')]/div[@data-viewid='basicInfo']/div[@data-viewid='basicInfo']/div[contains(@class,'placeinfo_default')]/div[contains(@class,'location_detail')]/div[contains(@class,'txt_tag')]/span/a")
