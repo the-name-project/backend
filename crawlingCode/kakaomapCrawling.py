@@ -172,19 +172,24 @@ while hasNext:
 
             driver.get(searchURL)
             time.sleep(3)
-            driver.switch_to.frame("searchIframe")
-            time.sleep(1)
-            placeList = driver.find_elements(By.XPATH,"//li[@data-laim-exp-id='undefined']/div[contains(@class,'_3ZU00 _1rBq3')]/a/div/div/span[contains(@class,'_3Apve')]")
-            if 1<len(placeList):
-                time.sleep(3)
+            for i  in range(1,10):
                 try:
-                    actions.click(placeList[0]).perform()
+                    driver.switch_to.frame("searchIframe")
                     time.sleep(1)
-                except StaleElementReferenceException:
-                    pass
-                
-            driver.switch_to.default_content()
-            time.sleep(1)
+                    placeList = driver.find_elements(By.XPATH,"//li[@data-laim-exp-id='undefined']/div[contains(@class,'_3ZU00 _1rBq3')]/a/div/div/span[contains(@class,'_3Apve')]")
+                    if 1<len(placeList):
+                        time.sleep(3)
+                        try:
+                            actions.click(placeList[0]).perform()
+                            time.sleep(1)
+                        except StaleElementReferenceException:
+                            pass
+                        
+                    driver.switch_to.default_content()
+                    time.sleep(1)
+                    break
+                except NoSuchElementException:
+                    continue
             #네이버 리뷰
             
             try:
