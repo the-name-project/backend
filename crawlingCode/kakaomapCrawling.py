@@ -7,6 +7,7 @@ import re
 import json
 from selenium.common.exceptions import NoSuchFrameException
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import NoSuchElementException
 import naverMenuCrawling
 
 options = webdriver.ChromeOptions()
