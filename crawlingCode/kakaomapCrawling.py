@@ -85,6 +85,7 @@ while hasNext:
                 break
             except StaleElementReferenceException:
                 continue
+            
         
         if checkMovePageButton:
             break
@@ -190,6 +191,8 @@ while hasNext:
                     time.sleep(1)
                     break
                 except NoSuchElementException:
+                    continue
+                except NoSuchFrameException:
                     continue
             #네이버 리뷰
             
