@@ -1,6 +1,8 @@
 from typing import Optional, List
 from sqlmodel import Field, SQLModel, Relationship
 
+from app.poll.model import PollContent
+
 class Store_Info(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str = Field(index=True)
@@ -15,3 +17,6 @@ class Store_Info(SQLModel, table=True):
     daum_score: Optional[str] = Field(default=None, nullable=True)
 
     menu: List['Menu'] = Relationship(back_populates='store_info')
+
+    # PollContent 1:1
+    poll_content: Optional["PollContent"] = Relationship(back_populates="store")

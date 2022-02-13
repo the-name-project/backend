@@ -2,17 +2,14 @@
 name = "backend"
 version = "0.1.0"
 description = ""
-authors = ["nlpwantyou <king.god.ant@gmail.com>"]
+authors = ["SMin1620 <ibb09@naver.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 fastapi = "^0.73.0"
+uvicorn = "^0.17.4"
 sqlmodel = "^0.0.6"
-selenium = "^4.1.0"
-bs4 = "^0.0.1"
-uvicorn = {extras = ["standard"], version = "^0.17.4"}
-passlib = "^1.7.4"
-python-jose = "^3.3.0"
+PyMySQL = "^1.0.2"
 
 [tool.poetry.dev-dependencies]
 
