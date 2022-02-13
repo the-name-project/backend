@@ -1,20 +1,19 @@
 from sqlmodel import Session, create_engine
-from ..app.store.model import Store_Info
-from ..app.store.menu.model import Menu
+from app.store.model import Store_Info
+from app.store.menu.model import Menu
 import json
 
 sqlite_file_name = "../test_database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 
-engine = create_engine(sqlite_url, echo=True)
+engine = create_engine(sqlite_url)#, echo=True
 
-def read_json_and_make_data(filename = '중구.json'):
+def read_json_and_make_data(filename):
     with open(filename, 'r') as jsonfile:
         json_datas = json.load(jsonfile)
 
     with Session(engine) as session:
         for store_name in json_datas:
-            print(store_name)
             store_info = Store_Info(name = json_datas[store_name]['placeName']
                                     , address = json_datas[store_name]['placeAddress']
                                     , open_time = json_datas[store_name]['placeHour']
@@ -35,4 +34,9 @@ def read_json_and_make_data(filename = '중구.json'):
 
 
 if __name__ == "__main__":
-    read_json_and_make_data()
+    from os import listdir
+    result_file_dir = "../crawling_result/"
+    for filename in listdir(result_file_dir):
+        print(f"start {filename}")
+        read_json_and_make_data(result_file_dir + filename)
+        print(f"end {filename}")
