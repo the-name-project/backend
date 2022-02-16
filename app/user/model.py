@@ -1,22 +1,34 @@
 from typing import Optional
 from sqlmodel import Field, SQLModel
+from pydantic import EmailStr
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     nickname: str
     full_name: str
-    email: str
+    email: EmailStr
     hashed_password: str
     suspended: bool = Field(default=False)
 
-from passlib.context import CryptContext
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+class UserCreate(SQLModel):
+    nickname: str
+    full_name: str
+    email: EmailStr
+    hashed_password: str
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+class UserRead(SQLModel):
+    id: int
+    nickname: str
+    full_name: str
+    email: EmailStr
+    hashed_password: str
+    suspended: bool
 
 
-def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+class UserUpdate(SQLModel):
+    nickname: Optional[str] = None
+    full_name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    hashed_password: Optional[str] = None
