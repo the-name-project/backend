@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 
-app = FastAPI()
+router = APIRouter()
 
 
 dummy_data = [
@@ -30,7 +30,7 @@ dummy_data = [
 
 
 # User Review
-@app.get('/user/{user_id}/review')
+@router.get('/user/{user_id}/review')
 async def read_review(user_id: int):
     result = []
     for data in dummy_data:

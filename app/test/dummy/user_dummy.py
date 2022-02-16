@@ -1,10 +1,7 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
-from typing import Optional
 
-from app.user.model import UserRead, User
-
-app = FastAPI()
+router = APIRouter()
 
 # user dummy data
 # dummy_data = User(
@@ -34,14 +31,14 @@ dummy_data = [
 
 
 # User Dummy Data
-@app.get('/user')
+@router.get('/user')
 async def read_user():
     # dummy_data.dict()
     return jsonable_encoder({"user": dummy_data})
 
 
 # Users Dummy Data
-@app.get('/user/{user_id}')
+@router.get('/user/{user_id}')
 async def read_user(user_id: int):
     # dummy_data.dict()
     result = {}
@@ -51,9 +48,3 @@ async def read_user(user_id: int):
             break
 
     return result
-
-
-if __name__ == "__main__":
-    from os import system
-
-    system("uvicorn app.main:app --reload")

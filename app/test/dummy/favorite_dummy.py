@@ -1,9 +1,7 @@
-from fastapi import FastAPI
-from sqlalchemy.orm import query
-from sqlmodel import select
+from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 
-app = FastAPI()
+router = APIRouter()
 
 dummy_data = [
     {
@@ -58,14 +56,14 @@ dummy_data = [
 
 
 # favorite
-@app.get('/user/favorite')
+@router.get('/user/favorite')
 async def read_favorite():
     # favorite = dummy_data.query.filter(dummy_data.user.id == user_id)
     return jsonable_encoder({"favorite": dummy_data})
 
 
 # user favorite
-@app.get('/user/{user_id}/favorite')
+@router.get('/user/{user_id}/favorite')
 async def read_favorite(user_id: int):
     # favorite = dummy_data.query.filter(dummy_data.user.id == user_id)
     result = []
@@ -74,9 +72,3 @@ async def read_favorite(user_id: int):
             result.append(data)
 
     return jsonable_encoder({"favorite": result})
-
-
-if __name__ == "__main__":
-    from os import system
-
-    system("uvicorn app.main:app --reload")
