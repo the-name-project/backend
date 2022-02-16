@@ -132,6 +132,22 @@ ssh = ["bcrypt (>=3.1.5)"]
 test = ["pytest (>=6.2.0)", "pytest-cov", "pytest-subtests", "pytest-xdist", "pretend", "iso8601", "pytz", "hypothesis (>=1.11.4,!=3.79.2)"]
 
 [[package]]
+name = "dnspython"
+version = "2.2.0"
+description = "DNS toolkit"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[package.extras]
+dnssec = ["cryptography (>=2.6,<37.0)"]
+curio = ["curio (>=1.2,<2.0)", "sniffio (>=1.1,<2.0)"]
+doh = ["h2 (>=4.1.0)", "httpx (>=0.21.1)", "requests (>=2.23.0,<3.0.0)", "requests-toolbelt (>=0.9.1,<0.10.0)"]
+idna = ["idna (>=2.1,<4.0)"]
+trio = ["trio (>=0.14,<0.20)"]
+wmi = ["wmi (>=1.5.1,<2.0.0)"]
+
+[[package]]
 name = "ecdsa"
 version = "0.17.0"
 description = "ECDSA cryptographic signature library (pure python)"
@@ -145,6 +161,18 @@ six = ">=1.9.0"
 [package.extras]
 gmpy = ["gmpy"]
 gmpy2 = ["gmpy2"]
+
+[[package]]
+name = "email-validator"
+version = "1.1.3"
+description = "A robust email syntax and deliverability validation library for Python 2.x/3.x."
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+
+[package.dependencies]
+dnspython = ">=1.15.0"
+idna = ">=2.0.0"
 
 [[package]]
 name = "fastapi"
@@ -252,6 +280,7 @@ optional = false
 python-versions = ">=3.6.1"
 
 [package.dependencies]
+email-validator = {version = ">=1.0.3", optional = true, markers = "extra == \"email\""}
 typing-extensions = ">=3.7.4.3"
 
 [package.extras]
@@ -301,6 +330,17 @@ rsa = "*"
 cryptography = ["cryptography (>=3.4.0)"]
 pycrypto = ["pycrypto (>=2.6.0,<2.7.0)", "pyasn1"]
 pycryptodome = ["pycryptodome (>=3.3.1,<4.0.0)", "pyasn1"]
+
+[[package]]
+name = "python-multipart"
+version = "0.0.5"
+description = "A streaming multipart parser for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = ">=1.4.0"
 
 [[package]]
 name = "pyyaml"
@@ -559,7 +599,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "e688c8bffceb58ee384b6c7dd61c1e2c714c119f3c790922eb511e283bbf4144"
+content-hash = "628617e9da10357da9ce907685471833eb7f792b68b19c2c2e5503b89ad3a2b9"
 
 [metadata.files]
 anyio = [
@@ -671,9 +711,17 @@ cryptography = [
     {file = "cryptography-36.0.1-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:39bdf8e70eee6b1c7b289ec6e5d84d49a6bfa11f8b8646b5b3dfe41219153316"},
     {file = "cryptography-36.0.1.tar.gz", hash = "sha256:53e5c1dc3d7a953de055d77bef2ff607ceef7a2aac0353b5d630ab67f7423638"},
 ]
+dnspython = [
+    {file = "dnspython-2.2.0-py3-none-any.whl", hash = "sha256:081649da27ced5e75709a1ee542136eaba9842a0fe4c03da4fb0a3d3ed1f3c44"},
+    {file = "dnspython-2.2.0.tar.gz", hash = "sha256:e79351e032d0b606b98d38a4b0e6e2275b31a5b85c873e587cc11b73aca026d6"},
+]
 ecdsa = [
     {file = "ecdsa-0.17.0-py2.py3-none-any.whl", hash = "sha256:5cf31d5b33743abe0dfc28999036c849a69d548f994b535e527ee3cb7f3ef676"},
     {file = "ecdsa-0.17.0.tar.gz", hash = "sha256:b9f500bb439e4153d0330610f5d26baaf18d17b8ced1bc54410d189385ea68aa"},
+]
+email-validator = [
+    {file = "email_validator-1.1.3-py2.py3-none-any.whl", hash = "sha256:5675c8ceb7106a37e40e2698a57c056756bf3f272cfa8682a4f87ebd95d8440b"},
+    {file = "email_validator-1.1.3.tar.gz", hash = "sha256:aa237a65f6f4da067119b7df3f13e89c25c051327b2b5b66dc075f33d62480d7"},
 ]
 fastapi = [
     {file = "fastapi-0.73.0-py3-none-any.whl", hash = "sha256:f0a618aff5f6942862f2d3f20f39b1c037e33314d1b8207fd1c3a2cca76dfd8c"},
@@ -845,6 +893,9 @@ python-dotenv = [
 python-jose = [
     {file = "python-jose-3.3.0.tar.gz", hash = "sha256:55779b5e6ad599c6336191246e95eb2293a9ddebd555f796a65f838f07e5d78a"},
     {file = "python_jose-3.3.0-py2.py3-none-any.whl", hash = "sha256:9b1376b023f8b298536eedd47ae1089bcdb848f1535ab30555cd92002d78923a"},
+]
+python-multipart = [
+    {file = "python-multipart-0.0.5.tar.gz", hash = "sha256:f7bb5f611fc600d15fa47b3974c8aa16e93724513b49b5f95c81e6624c83fa43"},
 ]
 pyyaml = [
     {file = "PyYAML-6.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:d4db7c7aef085872ef65a8fd7d6d09a14ae91f691dec3e87ee5ee0539d516f53"},
