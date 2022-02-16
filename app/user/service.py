@@ -1,6 +1,6 @@
-from typing import Optional, Any, Union, Generator
+from typing import Optional, Any, Union
 
-from sqlmodel import Session, select, create_engine
+from sqlmodel import Session, select
 
 import secrets
 

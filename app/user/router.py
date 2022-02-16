@@ -1,8 +1,8 @@
-from typing import Any, List, Generator
+from typing import Any, List
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
-from sqlmodel import Session, create_engine
+from sqlmodel import Session
 
 from .service import service
 from .schemas import Token
