@@ -1,10 +1,5 @@
-from email.policy import default
-import json
-from operator import index
-from typing import List, Optional
-from numpy import integer
-from sqlalchemy import column
-from sqlmodel import Field, Session,select,create_engine
+from typing import List
+from sqlmodel import Session,select,create_engine
 from fastapi.exceptions import HTTPException
 from fastapi import FastAPI, Query, status
 from app.store.model import Store_Info
