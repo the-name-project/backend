@@ -15,3 +15,4 @@ class Store_Info(SQLModel, table=True):
     daum_score: Optional[str] = Field(default=None, nullable=True)
 
     menu: List['Menu'] = Relationship(back_populates='store_info')
+
