@@ -2,15 +2,13 @@ from typing import Optional, Any, Union
 
 from sqlmodel import Session, select
 
-import secrets
-
 from app.base import Service
 
 from .security import get_password_hash, verify_password
 from .model import User, UserCreate, UserUpdate
 from .exceptions import UserNotFoundException
 from .schemas import TokenPayload
-from app.DB_session import get_session
+from app.DB_session import get_session, SECRET_KEY
 
 from datetime import datetime, timedelta
 
@@ -36,7 +34,7 @@ def create_access_token(
             minutes=60
         )
     to_encode = {"exp": expire, "sub": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, secrets.token_urlsafe(32), algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 
@@ -44,7 +42,7 @@ def get_current_user(
     session: Session = Depends(get_session), token: str = Depends(oauth2_scheme)
 ) -> User:
     try:
-        payload = jwt.decode(token, secrets.token_urlsafe(32), algorithms=[ALGORITHM])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         token_data = TokenPayload(**payload)
     except (jwt.JWTError, ValidationError):
         raise HTTPException(
