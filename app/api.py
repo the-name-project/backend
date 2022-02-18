@@ -7,7 +7,7 @@ from app.test.dummy.user_dummy import router as user_dummy
 
 router = APIRouter()
 
-router.include_router(user, prefix="/users", tags=["users"])
+router.include_router(user, tags=["users"])
 router.include_router(store, prefix="/store", tags=["stores"])
 router.include_router(favorite)
 router.include_router(review)

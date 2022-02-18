@@ -17,7 +17,7 @@ from sqlalchemy.exc import IntegrityError
 
 router = APIRouter()
 
-@router.post("", response_model=UserRead, status_code=status.HTTP_201_CREATED)
+@router.post("/users", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 def create_user(
     *,
     session: Session = Depends(get_session),
@@ -29,7 +29,7 @@ def create_user(
         raise UserEmailAlreadyExistsException()
 
 
-@router.get("", response_model=List[UserRead], status_code=status.HTTP_200_OK)
+@router.get("/users", response_model=List[UserRead], status_code=status.HTTP_200_OK)
 def read_users(
     *,
     session: Session = Depends(get_session),
@@ -39,7 +39,7 @@ def read_users(
     return service.find_all(session, offset=offset, limit=limit)
 
 
-@router.get("/{user_id}", response_model=UserRead, status_code=status.HTTP_200_OK)
+@router.get("/users/{user_id}", response_model=UserRead, status_code=status.HTTP_200_OK)
 def read_user(
     *,
     session: Session = Depends(get_session),
@@ -52,7 +52,7 @@ def read_user(
     return user
 
 
-@router.patch("/{user_id}", response_model=UserRead, status_code=status.HTTP_200_OK)
+@router.patch("/users/{user_id}", response_model=UserRead, status_code=status.HTTP_200_OK)
 def update_user(
     *,
     session: Session = Depends(get_session),
@@ -69,7 +69,7 @@ def update_user(
     return service.update(session, object_model=user, object_in=user_body)
 
 
-@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(
     *,
     session: Session = Depends(get_session),
@@ -82,7 +82,7 @@ def delete_user(
     service.remove(session, object_model=user)
 
 
-@router.post("/token", response_model=Token, status_code=200)
+@router.post("/auth/token", response_model=Token, status_code=200)
 def authenticate(
     *,
     session: Session = Depends(get_session),
