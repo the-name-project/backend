@@ -1,3 +1,4 @@
+from operator import index
 from typing import List
 from sqlmodel import Session,select,create_engine
 from fastapi.exceptions import HTTPException
@@ -18,29 +19,45 @@ async def get_stores(
         skip: int = 0,
         limit: int = 10,
         wheres:List[str]=Query(None)):
-    Statement = select(Store_Info).offset(skip).limit(limit)
-    data_info = session.exec(Statement).all()
-    print("***********************8")
-    print(data_info)
-    if data_info == None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    df = []
-    for  data in data_info:
-        df.append(data.__dict__)
-    df = pd.DataFrame(df)
-    print(df.head())
-    if wheres:
-        for where in wheres:
-            filtered= df[df['address'].str.contains(where)]
-    else:
-        filtered = df
+    first = 0
+    end = skip
+    filtered = pd.DataFrame()
+    
+    while limit>len(filtered.index):
+        first = end
+        end=first+100
+        Statement = select(Store_Info).offset(first).limit(end)
+        data_info = session.exec(Statement).all()
+        
+        if data_info == None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        if len(data_info) == 0:
+            break
+        df = []
+        for  data in data_info:
+            df.append(data.__dict__)
+        df = pd.DataFrame(df)
+        if wheres:
+            for where in wheres:
+                df= df[df['address'].str.contains(where)]
+        else:
+            pass
+        if len(filtered.index) ==0:
+            filtered = df
+        else:
+            filtered = pd.concat([filtered,df])
+        print(len(filtered.index))
     default = []
-
+    
     for i in range(0,len(filtered.index)):
         which  = filtered.iloc[i].id
         Statement = select(Store_Info).where(Store_Info.id == int(which))
         data_info = session.exec(Statement).first()
         default.append(data_info)
+    default.append({
+        "end" : {end},
+        "amount": {len(filtered.index)}
+    })
     
     return default
 
