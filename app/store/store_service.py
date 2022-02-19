@@ -46,7 +46,11 @@ async def get_stores(
             filtered = df
         else:
             filtered = pd.concat([filtered,df])
-        print(len(filtered.index))
+        if len(filtered.index) > limit:
+            
+            while len(filtered.index) != limit:
+                end=  int(filtered.iloc[len(filtered.index)-1].id)
+                filtered = filtered[:-1]
     default = []
     
     for i in range(0,len(filtered.index)):
