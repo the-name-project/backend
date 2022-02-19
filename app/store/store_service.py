@@ -25,7 +25,7 @@ async def get_stores(
     
     while limit>len(filtered.index):
         first = end
-        end=first+100
+        end=first+limit
         Statement = select(Store_Info).offset(first).limit(end)
         data_info = session.exec(Statement).all()
         

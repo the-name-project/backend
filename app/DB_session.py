@@ -2,7 +2,7 @@ from sqlmodel import Session, create_engine
 from typing import Generator
 import secrets
 
-sqlite_file_name = "../test_database.db"
+sqlite_file_name = "test_database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 engine = create_engine(sqlite_url)
 
