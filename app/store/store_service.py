@@ -3,11 +3,14 @@ from typing import List
 from sqlmodel import Session,select,create_engine
 from fastapi.exceptions import HTTPException
 from fastapi import APIRouter, Depends, Query, status
+import pandas as pd
+
+from app.DB_session import get_session
 from app.store.model import Store_Info
 from app.store.menu.model import Menu
-import pandas as pd
-from app.DB_session import get_session
-
+from app.user.model import User
+from app.user.service import get_current_user
+from app.store.service import service
 
 router = APIRouter()
 
@@ -58,7 +61,6 @@ async def get_stores(
         "end" : {end},
         "amount": {len(filtered.index)}
     })
-    
     return default
 
 
@@ -88,3 +90,29 @@ async def get_menu(
     if default == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return default
+
+
+# 가게 좋아요 기능
+@router.post('/{store_id}/likes', status_code=status.HTTP_204_NO_CONTENT)
+def like_store(
+        *,
+        session: Session = Depends(get_session),
+        store_id: int,
+        current_user: User = Depends(get_current_user)
+):
+    service.like_store(session, store_id=store_id, user_id=current_user.id)
+
+
+# 가게 좋아요 취소 기능
+@router.delete('/{store_id}/likes', status_code=status.HTTP_204_NO_CONTENT)
+def delete_like_store(
+        *,
+        session: Session = Depends(get_session),
+        store_id: int,
+        current_user: User = Depends(get_current_user)
+):
+    service.delete_like_store(session, store_id=store_id, user_id=current_user.id)
+
+
+
+
