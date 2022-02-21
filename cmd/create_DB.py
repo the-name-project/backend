@@ -3,6 +3,7 @@ from app.store.model import Store_Info
 from app.store.menu.model import Menu
 from app.user.model import User
 #from app.user.favorite.model import *
+from app.review.model import *
 
 from sqlmodel import SQLModel, create_engine
 
