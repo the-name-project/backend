@@ -15,6 +15,9 @@ class User(SQLModel, table=True):
     # StoreLike <-> User 다대다
     liked_store: List['Store_Info'] = Relationship(back_populates='liked_user', link_model=StoreLike)
 
+    # review
+    reviews: List['Review'] = Relationship(back_populates='user')
+
 
 class UserCreate(SQLModel):
     nickname: str
