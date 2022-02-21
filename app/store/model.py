@@ -24,3 +24,6 @@ class Store_Info(SQLModel, table=True):
 
     menu: List['Menu'] = Relationship(back_populates='store_info')
     liked_user: List['User'] = Relationship(back_populates='liked_store', link_model=StoreLike)
+
+    # review
+    reviews: List["Review"] = Relationship(back_populates='store_info')
