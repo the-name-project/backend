@@ -7,6 +7,9 @@ class StoreLike(SQLModel, table=True):
     store_id: int = Field(foreign_key='store_info.id', primary_key=True)
     user_id: int = Field(foreign_key='user.id', primary_key=True)
 
+class StoreFavorite(SQLModel,table =True):
+    store_id: int = Field(foreign_key='store_info.id', primary_key=True)
+    user_id: int = Field(foreign_key='user.id', primary_key=True)
 
 # Store Information
 class Store_Info(SQLModel, table=True):
@@ -24,3 +27,4 @@ class Store_Info(SQLModel, table=True):
 
     menu: List['Menu'] = Relationship(back_populates='store_info')
     liked_user: List['User'] = Relationship(back_populates='liked_store', link_model=StoreLike)
+    favorite_user: List['User'] = Relationship(back_populates='favorite_store', link_model=StoreFavorite)
