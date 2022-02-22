@@ -1,7 +1,5 @@
-from operator import index
-from re import S
 from typing import List
-from sqlmodel import Session,select,create_engine
+from sqlmodel import Session,select
 from fastapi.exceptions import HTTPException
 from fastapi import APIRouter, Depends, Query, status
 import pandas as pd
@@ -15,7 +13,7 @@ from app.store.service import service
 
 router = APIRouter()
 
-# ?skip=0&limit=10
+
 @router.get('',status_code=status.HTTP_200_OK)
 async def get_stores(
         *,
@@ -70,7 +68,7 @@ async def get_stores(
     return default
 
 @router.get('/naver_score',status_code=status.HTTP_200_OK)
-async def get_stores(
+async def get_sorted_stores_by_naver(
         *,
         session: Session = Depends(get_session),
         skip: int = 0,
@@ -123,8 +121,8 @@ async def get_stores(
     
     return default
 
-@router.get('/daumn_score',status_code=status.HTTP_200_OK)
-async def get_stores(
+@router.get('/daum_score',status_code=status.HTTP_200_OK)
+async def get_sorted_stores_by_kakao(
         *,
         session: Session = Depends(get_session),
         skip: int = 0,
@@ -207,13 +205,22 @@ async def get_menu(
 
 # 가게 좋아요 기능
 @router.post('/{store_id}/likes', status_code=status.HTTP_204_NO_CONTENT)
-def like_store(
+def do_like_store(
         *,
         session: Session = Depends(get_session),
         store_id: int,
         current_user: User = Depends(get_current_user)
 ):
     service.like_store(session, store_id=store_id, user_id=current_user.id)
+
+# 가게 좋아요 갯수 기능
+@router.get('/{store_id}/likes/num', status_code=status.HTTP_204_NO_CONTENT)
+def get_like_store(
+        *,
+        session: Session = Depends(get_session),
+        store_id: int,
+):
+    return  service.get_like_num_store(session, store_id=store_id)
 
 
 # 가게 좋아요 취소 기능
@@ -225,7 +232,3 @@ def delete_like_store(
         current_user: User = Depends(get_current_user)
 ):
     service.delete_like_store(session, store_id=store_id, user_id=current_user.id)
-
-
-
-
