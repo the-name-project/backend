@@ -13,7 +13,7 @@ from app.store.service import service
 
 router = APIRouter()
 
-# ?skip=0&limit=10
+
 @router.get('',status_code=status.HTTP_200_OK)
 async def get_stores(
         *,
@@ -68,7 +68,7 @@ async def get_stores(
     return default
 
 @router.get('/naver_score',status_code=status.HTTP_200_OK)
-async def get_stores(
+async def get_sorted_stores_by_naver(
         *,
         session: Session = Depends(get_session),
         skip: int = 0,
@@ -121,8 +121,8 @@ async def get_stores(
     
     return default
 
-@router.get('/daumn_score',status_code=status.HTTP_200_OK)
-async def get_stores(
+@router.get('/daum_score',status_code=status.HTTP_200_OK)
+async def get_sorted_stores_by_kakao(
         *,
         session: Session = Depends(get_session),
         skip: int = 0,
@@ -205,7 +205,7 @@ async def get_menu(
 
 # 가게 좋아요 기능
 @router.post('/{store_id}/likes', status_code=status.HTTP_204_NO_CONTENT)
-def like_store(
+def do_like_store(
         *,
         session: Session = Depends(get_session),
         store_id: int,
@@ -220,7 +220,7 @@ def get_like_store(
         session: Session = Depends(get_session),
         store_id: int,
 ):
-    return  service.get_like_store(session, store_id=store_id)
+    return  service.get_like_num_store(session, store_id=store_id)
 
 
 # 가게 좋아요 취소 기능
@@ -232,42 +232,3 @@ def delete_like_store(
         current_user: User = Depends(get_current_user)
 ):
     service.delete_like_store(session, store_id=store_id, user_id=current_user.id)
-
-# 가게 찜 기능
-@router.post('/{store_id}/favorite', status_code=status.HTTP_204_NO_CONTENT)
-def favorite_store(
-        *,
-        session: Session = Depends(get_session),
-        store_id: int,
-        current_user: User = Depends(get_current_user)
-):
-    
-    service.favorite_store(session, store_id=store_id, user_id=current_user.id)
-
-# 유저의 찜 가게
-@router.get('/favorite/stores', status_code=status.HTTP_204_NO_CONTENT)
-def get_favorite_store(
-        *,
-        session: Session = Depends(get_session),
-        current_user: User = Depends(get_current_user)
-):
-    return service.get_favorite_store(session, user_id=current_user.id)
-
-# 가게 찜 취소 기능
-@router.delete('/{store_id}/favorite', status_code=status.HTTP_204_NO_CONTENT)
-def delete_favorite_store(
-        *,
-        session: Session = Depends(get_session),
-        store_id: int,
-        current_user: User = Depends(get_current_user)
-):
-    service.delete_favorite_store(session, store_id=store_id, user_id=current_user.id)
-
-# 가게 찜 갯수 기능
-@router.get('/{store_id}favorite/num', status_code=status.HTTP_204_NO_CONTENT)
-def get_like_store(
-        *,
-        session: Session = Depends(get_session),
-        store_id: int,
-):
-    return  service.get_favorite_store_num(session, store_id=store_id)
