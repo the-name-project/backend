@@ -1,7 +1,7 @@
 import json
 from random import randint
 from app.store.base import Service
-from app.store.model import Store_Info, StoreLike
+from app.store.model import Store, StoreLike
 from app.store.menu.model import Menu
 from sqlmodel import Session, select
 from fastapi.responses import JSONResponse
@@ -11,7 +11,7 @@ from fastapi.exceptions import HTTPException
 from fastapi import Query, status
 import pandas as pd
 
-class StoreService(Service[Store_Info]):
+class StoreService(Service[Store]):
     #가게 필터
     def filter_store(self,session:Session,skip:int,limit:int,wheres:List[str]=Query(None)) -> None:
         first = 0
@@ -21,7 +21,7 @@ class StoreService(Service[Store_Info]):
         while limit>len(filtered.index):
             first = end
             end=first+100
-            Statement = select(Store_Info).offset(first).limit(100)
+            Statement = select(Store).offset(first).limit(100)
             data_info = session.exec(Statement).all()
             
             if data_info == None:
@@ -51,7 +51,7 @@ class StoreService(Service[Store_Info]):
         
         for i in range(0,len(filtered.index)):
             which  = filtered.iloc[i].id
-            Statement = select(Store_Info).where(Store_Info.id == int(which))
+            Statement = select(Store).where(Store.id == int(which))
             data_info = session.exec(Statement).first()
             print(data_info)
             if data_info:
@@ -72,7 +72,7 @@ class StoreService(Service[Store_Info]):
         while limit>len(filtered.index):
             first = end
             end=first+100
-            Statement = select(Store_Info).where(Store_Info.naver_score!="None").order_by(Store_Info.naver_score.desc()).offset(first).limit(100)
+            Statement = select(Store).where(Store.naver_score != "None").order_by(Store.naver_score.desc()).offset(first).limit(100)
             data_info = session.exec(Statement).all()
             
             if data_info == None:
@@ -102,7 +102,7 @@ class StoreService(Service[Store_Info]):
         filtered = filtered.sort_values(by='naver_score' ,ascending=False)
         for i in range(0,len(filtered.index)):
             which  = filtered.iloc[i].id
-            Statement = select(Store_Info).where(Store_Info.id == int(which))
+            Statement = select(Store).where(Store.id == int(which))
             data_info = session.exec(Statement).first()
             default.append(data_info.dict())
         default.append({
@@ -121,7 +121,7 @@ class StoreService(Service[Store_Info]):
         while limit>len(filtered.index):
             first = end
             end=first+100
-            Statement = select(Store_Info).where(Store_Info.daum_score!="None").order_by(Store_Info.daum_score.desc()).offset(first).limit(100)
+            Statement = select(Store).where(Store.daum_score != "None").order_by(Store.daum_score.desc()).offset(first).limit(100)
             data_info = session.exec(Statement).all()
             
             if data_info == None:
@@ -151,7 +151,7 @@ class StoreService(Service[Store_Info]):
         filtered = filtered.sort_values(by='daum_score' ,ascending=False)
         for i in range(0,len(filtered.index)):
             which  = filtered.iloc[i].id
-            Statement = select(Store_Info).where(Store_Info.id == int(which))
+            Statement = select(Store).where(Store.id == int(which))
             data_info = session.exec(Statement).first()
             default.append(data_info.dict())
         default.append({
@@ -224,5 +224,5 @@ class StoreService(Service[Store_Info]):
 
    
 
-service = StoreService(Store_Info)
+service = StoreService(Store)
 

@@ -1,8 +1,10 @@
 from typing import Optional, List
 from sqlmodel import Field, SQLModel, Relationship
 from pydantic import EmailStr
-
-from app.store.model import StoreLike,StoreFavorite
+from sqlalchemy.orm.relationships import RelationshipProperty
+from app.like.model import StoreLike
+from app.favorite.model import StoreFavorite
+from app.review.model import Review_info
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -13,13 +15,13 @@ class User(SQLModel, table=True):
     suspended: bool = Field(default=False)
 
     # StoreLike <-> User 다대다
-    liked_store: List['Store_Info'] = Relationship(back_populates='liked_user', link_model=StoreLike)
+    liked_store: List['Store'] = Relationship(back_populates='liked_user', link_model=StoreLike)
     
     # storeFavorite
-    favorite_store: List['Store_Info'] = Relationship(back_populates='favorite_user', link_model=StoreFavorite)
+    favorite_store: List['Store'] = Relationship(back_populates='favorite_user', link_model=StoreFavorite)
 
     # review
-    reviews: List['Review'] = Relationship(back_populates='user')
+    review_store: List["Store"] = Relationship(back_populates='review_user',link_model=Review_info)
 
 
 class UserCreate(SQLModel):

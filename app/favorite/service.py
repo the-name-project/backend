@@ -1,11 +1,11 @@
 from app.favorite.base import Service
 from app.favorite.model import  StoreFavorite
-from app.store.model import Store_Info
+from app.store.model import Store
 from sqlmodel import Session, select
 from fastapi.responses import JSONResponse
 
 
-class FavoriteService(Service[Store_Info]):
+class FavoriteService(Service[Store]):
     # 가게 찜
     def favorite_store(self, session: Session, store_id: int, user_id: int) -> None:
         statement = (
@@ -36,8 +36,8 @@ class FavoriteService(Service[Store_Info]):
         default = []
         for favorite in store_favorite:
             store_statment=(
-                select(Store_Info)
-                .where(Store_Info.id == favorite.store_id)
+                select(Store)
+                .where(Store.id == favorite.store_id)
             )
             store = session.exec(store_statment).first()
             if store:
@@ -77,5 +77,5 @@ class FavoriteService(Service[Store_Info]):
         
         return JSONResponse(content=default)
 
-service = FavoriteService(Store_Info)
+service = FavoriteService(Store)
 

@@ -1,12 +1,14 @@
-from app.poll.model import *
-from app.store.model import *
+from app.favorite.model import StoreFavorite
+from app.like.model import StoreLike
+from app.review.model import Review_info
+from app.store.model import Store
 from app.store.menu.model import Menu
 from app.user.model import User
-#from app.user.favorite.model import *
+
 
 from sqlmodel import SQLModel, create_engine
 
-sqlite_file_name = "test_database.db"
+sqlite_file_name = "../test_database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 
 engine = create_engine(sqlite_url, echo=True)

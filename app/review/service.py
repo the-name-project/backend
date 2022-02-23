@@ -1,20 +1,20 @@
 from sqlmodel import Session
 from app.base import Service
 
-from app.review.model import Review, ReviewCreate, ReviewUpdate
+from app.review.model import Review_info, ReviewCreate, ReviewUpdate
 
 
-class ReviewService(Service[Review, ReviewCreate, ReviewUpdate]):
+class ReviewService(Service[Review_info, ReviewCreate, ReviewUpdate]):
     def review_store(self,
                      session: Session,
                      *,
                      object_data: ReviewCreate,
                      store_id: int,
                      user_id: int
-                     ) -> Review:
+                     ) -> Review_info:
         review_data = object_data.dict(exclude_unset=True)
 
-        review = Review(
+        review = Review_info(
             **review_data,
             store_id=store_id,
             user_id=user_id,
@@ -26,5 +26,5 @@ class ReviewService(Service[Review, ReviewCreate, ReviewUpdate]):
         return review
 
 
-service = ReviewService(Review)
+service = ReviewService(Review_info)
 
