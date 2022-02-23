@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, status
 from app.DB_session import get_session
 from app.user.model import User
 from app.user.service import get_current_user
-from app.store.service import service
+from app.favorite.service import service
 
 router = APIRouter()
 

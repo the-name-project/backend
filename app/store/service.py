@@ -1,11 +1,166 @@
+import json
+from random import randint
 from app.store.base import Service
-from app.store.model import Store_Info, StoreLike, StoreFavorite
+from app.store.model import Store_Info, StoreLike
+from app.store.menu.model import Menu
 from sqlmodel import Session, select
 from fastapi.responses import JSONResponse
-
-
+from typing import List
+from sqlmodel import Session,select
+from fastapi.exceptions import HTTPException
+from fastapi import Query, status
+import pandas as pd
 
 class StoreService(Service[Store_Info]):
+    #가게 필터
+    def filter_store(self,session:Session,skip:int,limit:int,wheres:List[str]=Query(None)) -> None:
+        first = 0
+        end = skip
+        filtered = pd.DataFrame()
+        
+        while limit>len(filtered.index):
+            first = end
+            end=first+100
+            Statement = select(Store_Info).offset(first).limit(100)
+            data_info = session.exec(Statement).all()
+            
+            if data_info == None:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+            if len(data_info) == 0:
+                break
+            df = []
+            
+            for  data in data_info:
+                df.append(data.__dict__)
+            df = pd.DataFrame(df)
+            if wheres:
+                for where in wheres:
+                    df= df[df['address'].str.contains(where)]
+            else:
+                pass
+            if len(filtered.index) ==0:
+                filtered = df
+            else:
+                filtered = pd.concat([filtered,df])
+            if len(filtered.index) > limit:
+                
+                while len(filtered.index) != limit:
+                    end=  int(filtered.iloc[len(filtered.index)-1].id)
+                    filtered = filtered[:-1]
+        default = []
+        
+        for i in range(0,len(filtered.index)):
+            which  = filtered.iloc[i].id
+            Statement = select(Store_Info).where(Store_Info.id == int(which))
+            data_info = session.exec(Statement).first()
+            print(data_info)
+            if data_info:
+                default.append(data_info.dict())
+        default.append({
+            "end" : {end},
+            "amount": {len(filtered.index)}
+        })
+        
+        return default
+
+    #가게 필터 (네이버 평점순)
+    def filter_store_naver(self,session:Session,skip:int,limit:int,wheres:List[str]=Query(None)) -> None:
+        first = 0
+        end = skip
+        filtered = pd.DataFrame()
+        
+        while limit>len(filtered.index):
+            first = end
+            end=first+100
+            Statement = select(Store_Info).where(Store_Info.naver_score!="None").order_by(Store_Info.naver_score.desc()).offset(first).limit(100)
+            data_info = session.exec(Statement).all()
+            
+            if data_info == None:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+            if len(data_info) == 0:
+                break
+            df = []
+            
+            for  data in data_info:
+                df.append(data.__dict__)
+            df = pd.DataFrame(df)
+            if wheres:
+                for where in wheres:
+                    df= df[df['address'].str.contains(where)]
+            else:
+                pass
+            if len(filtered.index) ==0:
+                filtered = df
+            else:
+                filtered = pd.concat([filtered,df])
+            if len(filtered.index) > limit:
+                
+                while len(filtered.index) != limit:
+                    end=  int(filtered.iloc[len(filtered.index)-1].id)
+                    filtered = filtered[:-1]
+        default = []
+        filtered = filtered.sort_values(by='naver_score' ,ascending=False)
+        for i in range(0,len(filtered.index)):
+            which  = filtered.iloc[i].id
+            Statement = select(Store_Info).where(Store_Info.id == int(which))
+            data_info = session.exec(Statement).first()
+            default.append(data_info.dict())
+        default.append({
+            "end" : {end},
+            "amount": {len(filtered.index)}
+        })
+        
+        return default
+
+    # 가게 필터 (카카오 평점순)
+    def filter_store_kakao(self,session:Session,skip:int,limit:int,wheres:List[str]=Query(None))->None:
+        first = 0
+        end = skip
+        filtered = pd.DataFrame()
+        
+        while limit>len(filtered.index):
+            first = end
+            end=first+100
+            Statement = select(Store_Info).where(Store_Info.daum_score!="None").order_by(Store_Info.daum_score.desc()).offset(first).limit(100)
+            data_info = session.exec(Statement).all()
+            
+            if data_info == None:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+            if len(data_info) == 0:
+                break
+            df = []
+            
+            for  data in data_info:
+                df.append(data.__dict__)
+            df = pd.DataFrame(df)
+            if wheres:
+                for where in wheres:
+                    df= df[df['address'].str.contains(where)]
+            else:
+                pass
+            if len(filtered.index) ==0:
+                filtered = df
+            else:
+                filtered = pd.concat([filtered,df])
+            if len(filtered.index) > limit:
+                
+                while len(filtered.index) != limit:
+                    end=  int(filtered.iloc[len(filtered.index)-1].id)
+                    filtered = filtered[:-1]
+        default = []
+        filtered = filtered.sort_values(by='daum_score' ,ascending=False)
+        for i in range(0,len(filtered.index)):
+            which  = filtered.iloc[i].id
+            Statement = select(Store_Info).where(Store_Info.id == int(which))
+            data_info = session.exec(Statement).first()
+            default.append(data_info.dict())
+        default.append({
+            "end" : {end},
+            "amount": {len(filtered.index)}
+        })
+        
+        return default
+
     # 가게 좋아요
     def like_store(self, session: Session, store_id: int, user_id: int) -> None:
         statement = (
@@ -53,79 +208,21 @@ class StoreService(Service[Store_Info]):
         session.delete(store_like)
         session.commit()
     
-    # 가게 찜
-    def favorite_store(self, session: Session, store_id: int, user_id: int) -> None:
+    #랜덤 메뉴
+    def get_random_menu(self,session:Session) -> None:
         statement = (
-            select(StoreFavorite)
-            .where(StoreFavorite.store_id == store_id)
-            .where(StoreFavorite.user_id == user_id)
+            select(Menu)
+            .where(Menu.menu_image != "None")
         )
-        store_favorite = session.exec(statement).one_or_none()
-        if store_favorite:
-            return
-
-        store_favorite = StoreFavorite(store_id=store_id, user_id=user_id)
-        session.add(store_favorite)
-        session.commit()
-
-    # 유저가 찜한 가게
-    def get_favorite_store(self,session:Session,user_id:int)->None:
-        print("="*100)
-        statment = (
-            select(StoreFavorite)
-            .where(StoreFavorite.user_id == user_id)
-        )
-        print("="*100)
-        store_favorite = session.exec(statment).all()
-        
-        print(store_favorite)
-        if store_favorite is None:
+        random_menu = session.exec(statement).all()
+        if random_menu is None:
             return None
-        
-        default = []
-        for favorite in store_favorite:
-            store_statment=(
-                select(Store_Info)
-                .where(Store_Info.id == favorite.store_id)
-            )
-            store = session.exec(store_statment).first()
-            print(type(store))
-            if store:
-                default.append(store.dict())
+        RandomNum = randint(1,len(random_menu))
+        default = random_menu[RandomNum-1].dict()
         return JSONResponse(content=default)
         
 
-    # 가게 좋아요 취소
-    def delete_favorite_store(self, session: Session, store_id: int, user_id: int) -> None:
-        statement = (
-            select(StoreFavorite)
-            .where(StoreFavorite.store_id == store_id)
-            .where(StoreFavorite.user_id == user_id)
-        )
-
-        store_favorite = session.exec(statement).one_or_none()
-        if store_favorite is None:
-            return
-
-        session.delete(store_favorite)
-        session.commit()
-
-    # 가게의 찜 갯수
-    def get_favorite_store_num(self,session:Session,store_id:int)->None:
-        statment = (
-            select(StoreFavorite)
-            .where(StoreFavorite.store_id == store_id)
-        )
-        
-        store_favorite = session.exec(statment).all()
-        
-        if store_favorite is None:
-            return None
-        default = {
-            'num' : len(store_favorite)
-        }
-        
-        return JSONResponse(content=default)
+   
 
 service = StoreService(Store_Info)
 

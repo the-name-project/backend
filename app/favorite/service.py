@@ -1,5 +1,6 @@
-from app.store.base import Service
-from app.store.model import Store_Info, StoreLike, StoreFavorite
+from app.favorite.base import Service
+from app.favorite.model import  StoreFavorite
+from app.store.model import Store_Info
 from sqlmodel import Session, select
 from fastapi.responses import JSONResponse
 
@@ -22,12 +23,10 @@ class FavoriteService(Service[Store_Info]):
 
     # 유저가 찜한 가게
     def get_favorite_store(self,session:Session,user_id:int)->None:
-        print("="*100)
         statment = (
             select(StoreFavorite)
             .where(StoreFavorite.user_id == user_id)
         )
-        print("="*100)
         store_favorite = session.exec(statment).all()
         
         print(store_favorite)
@@ -41,13 +40,12 @@ class FavoriteService(Service[Store_Info]):
                 .where(Store_Info.id == favorite.store_id)
             )
             store = session.exec(store_statment).first()
-            print(type(store))
             if store:
                 default.append(store.dict())
         return JSONResponse(content=default)
         
 
-    # 가게 좋아요 취소
+    # 가게 찜 취소
     def delete_favorite_store(self, session: Session, store_id: int, user_id: int) -> None:
         statement = (
             select(StoreFavorite)
