@@ -1,15 +1,9 @@
 from typing import Optional, List
 from sqlmodel import Field, SQLModel, Relationship
-
+from app.favorite.model import StoreFavorite
 
 # Store Like Model
 class StoreLike(SQLModel, table=True):
-    store_id: int = Field(foreign_key='store_info.id', primary_key=True)
-    user_id: int = Field(foreign_key='user.id', primary_key=True)
-
-
-
-class StoreFavorite(SQLModel,table =True):
     store_id: int = Field(foreign_key='store_info.id', primary_key=True)
     user_id: int = Field(foreign_key='user.id', primary_key=True)
 
