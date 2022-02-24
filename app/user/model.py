@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Any
 from sqlmodel import Field, SQLModel, Relationship
 from pydantic import EmailStr
 from sqlalchemy.orm.relationships import RelationshipProperty
@@ -21,7 +21,7 @@ class User(SQLModel, table=True):
     favorite_store: List['Store'] = Relationship(back_populates='favorite_user', link_model=StoreFavorite)
 
     # review
-    review_store: List["Store"] = Relationship(back_populates='review_user',link_model=Review_info)
+    reviews: List['Review_info'] = Relationship(back_populates='user')
 
 
 class UserCreate(SQLModel):
@@ -38,6 +38,8 @@ class UserRead(SQLModel):
     email: EmailStr
     hashed_password: str
     suspended: bool
+
+    reviews: Any
 
 
 class UserUpdate(SQLModel):

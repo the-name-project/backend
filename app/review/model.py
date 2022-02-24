@@ -7,7 +7,9 @@ class Review_info(SQLModel, table=True):
     content: str = Field(max_length=150, nullable=False)
 
     store_id: int = Field(default=None, foreign_key='store.id')
+    store: "Store" = Relationship(back_populates='reviews')
     user_id: int = Field(default=None, foreign_key='user.id')
+    user: "User" = Relationship(back_populates='reviews')
 
 # Review Create
 class ReviewCreate(SQLModel):
@@ -18,8 +20,8 @@ class ReviewCreate(SQLModel):
 class ReviewRead(SQLModel):
     id: int
     content: str
-    store_id: Any
-    user_id: Any
+    store: Any
+    user: Any
 
 
 # Review Update

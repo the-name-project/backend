@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Any
 from sqlmodel import Field, SQLModel, Relationship
 from sqlalchemy.orm.relationships import RelationshipProperty
 from app.favorite.model import StoreFavorite
@@ -24,4 +24,24 @@ class Store(SQLModel, table=True):
     liked_user: List[User] = Relationship(back_populates='liked_store', link_model=StoreLike)
     favorite_user: List[User] = Relationship(back_populates='favorite_store', link_model=StoreFavorite)
     # review
-    review_user: List["User"] = Relationship(back_populates='review_store',link_model=Review_info)
+    reviews: List['Review_info'] = Relationship(back_populates='store')
+
+
+class StoreRead(SQLModel):
+    id: int
+    name: str
+    address: str
+
+    open_time: Optional[str]
+    image: Optional[str]
+    tags: Optional[str]
+    tel_number: Optional[str]
+
+    naver_score: Optional[str]
+    daum_score: Optional[str]
+
+    menu: Any
+    liked_user: Any
+    favorite_user: Any
+
+    reviews: Any
