@@ -5,7 +5,8 @@ from fastapi import APIRouter, Depends, Query, status
 import pandas as pd
 
 from app.DB_session import get_session
-from app.store.model import Store
+from app.review.model import Review_info
+from app.store.model import Store, StoreRead
 from app.store.menu.model import Menu
 from app.user.model import User
 from app.user.service import get_current_user
@@ -42,7 +43,7 @@ async def get_sorted_stores_by_kakao(
         wheres:List[str]=Query(None)):
     return service.filter_store_kakao(session,skip=skip,limit=limit,wheres=wheres)
 
-@router.get('/{storeID}', response_model=Store)
+@router.get('/{storeID}', response_model=StoreRead)
 async def get_store(
         *,
         session: Session = Depends(get_session),

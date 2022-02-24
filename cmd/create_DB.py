@@ -1,7 +1,7 @@
 from app.favorite.model import StoreFavorite
 from app.like.model import StoreLike
 from app.review.model import Review_info
-from app.store.model import Store
+from app.store.model import Store, StoreRead
 from app.store.menu.model import Menu
 from app.user.model import User
 
